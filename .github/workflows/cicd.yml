@@ -1,0 +1,40 @@
+name: Deploy Next.js application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        
+      - name: Create .env file
+        run:  |
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+
+      - name: build docker image
+        run: Docker build -t tahirakhter1/next-app .
+
+      - name: login docker hub
+        run: Docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+
+      - name: publish image to docker
+        run: Docker push  tahirakhter1/next-app
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull tahirakhter1/next-app:latest
+
+      - name: Delete old container
+        run: docker rm -f next-app-container
+
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name next-app-container tahirakhter1/next-app
