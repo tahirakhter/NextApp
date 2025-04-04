@@ -3,7 +3,7 @@
 "use client"; // This marks the file as a client component
 
 import { useState, useEffect } from "react";
-import { fetchTodos, addTodo, deleteTodo, updateTodo, ITodo } from "@/lib";
+import { fetchTodos, addTodo, deleteTodo, updateTodo, ITodo } from "../lib";
 import AddTodo from "../app/components/addTodo";
 import TodoList from "../app/components/todoList";
 import React from "react";

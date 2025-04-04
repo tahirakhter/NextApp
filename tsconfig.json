@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".", // This is necessary for path aliases to work
     "plugins": [
       {
         "name": "next"
